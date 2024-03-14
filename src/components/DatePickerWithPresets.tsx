@@ -33,6 +33,16 @@ type DatePickerWithPresetsProp = {
 }
 const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, date, setDate  } : DatePickerWithPresetsProp ) {
 
+  const handleSelectChange = (value: string) => {
+    setDate(addDays(new Date(), parseInt(value)));
+  };
+
+  const handleCalendarSelect = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+  };
+  
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -49,9 +59,7 @@ const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, d
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={handleSelectChange}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -65,7 +73,7 @@ const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, d
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar mode="single" selected={date} onSelect={handleCalendarSelect} />
         </div>
       </PopoverContent>
     </Popover>

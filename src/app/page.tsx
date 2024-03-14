@@ -1,8 +1,10 @@
 'use client'
+import { format } from "date-fns"
 import DatePickerWithPresets, { SelectionItem } from "@/components/DatePickerWithPresets";
 import PrayerCardCounter, { Prayers} from "@/components/PrayerCardCounter";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 
 const FromSelection : SelectionItem = [
@@ -28,14 +30,6 @@ const ToSelection: SelectionItem = [
     name: "Today",
     value: `0`,
   },
-  {
-    name: "1 Week ago",
-    value: `7`,
-  },
-  {
-    name: "1 Years Ago",
-    value: -365,
-  },
 ]
 
 export default function Home() {
@@ -49,8 +43,9 @@ export default function Home() {
   });
   
   const [FromDate, setFromDate] = useState<Date>()
-  const [ToDate, setToDate] = useState<Date>(new Date())
+  const [ToDate, setToDate] = useState<Date | undefined>(new Date())
   const [daysDifference, setDaysDifference] = useState(0);
+  const { toast } = useToast()
   
   useEffect((): void => {
     const calculateDaysDifference = (fromDate: Date | undefined, toDate: Date | undefined) => {
@@ -77,30 +72,63 @@ export default function Home() {
     });
     
   },[daysDifference])
-  function handleSetPrayerCount(prayer: keyof Prayers ) {
-    setPrayerCounts(prevCounts => {
-      return {
-      ...prevCounts,
-      [prayer]: (prevCounts[prayer] || 0) + 1
-    }});
-  }
+  // function handleIncreasePrayerCount(prayer: keyof Prayers ) {
+  //   setPrayerCounts(prevCounts => {
+  //     return {
+  //     ...prevCounts,
+  //     [prayer]: (prevCounts[prayer] || 0) + 1
+  //   }});
+  // }
+  
+  // function handleDecreasePrayerCount(prayer: keyof Prayers ) {
+  //   setPrayerCounts(prevCounts => {
+  //     if((prevCounts[prayer] || 0) - 1 < 0) return prevCounts;
+      
+  //     return {
+  //     ...prevCounts,
+  //     [prayer]: (prevCounts[prayer] || 0) - 1
+  //   }});
+  // }
+
+  const handleSetFromDate = (FromDate: Date | undefined) => {
+    if (FromDate) {
+      if (ToDate && FromDate && FromDate.getTime() > ToDate.getTime()) {
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: "Your start date should be before your end date!",
+          variant: "destructive"
+        })
+        return ;
+      }
+    }
+    setFromDate(FromDate);
+  };
+  
+  const handleSetToDate = (ToDate: Date) => {
+    
+    if (ToDate && FromDate && FromDate.getTime() > ToDate.getTime()) {
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "Your end date should be after your start date!",
+        variant: "destructive"
+      })
+      return ;
+    }
+
+    setToDate(ToDate);
+  };
   
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-3">
+    <main className="flex flex-col items-center justify-start bg-background text-foreground p-3">
       
-      <div className="p-10">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Qada Solat Tracker</h1>
-        <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground">One Prayer at a time, Track with Confidence.</p>
-      </div>
-      
-      <div className="p-10 flex flex-col gap-4">
-          <Label>From</Label>
-        <div>
-          <DatePickerWithPresets FromSelection={FromSelection} setDate={setFromDate} date={FromDate}></DatePickerWithPresets>
+      <div className="p-10 flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col gap-3">
+          <Label className="">From</Label>
+          <DatePickerWithPresets FromSelection={FromSelection} setDate={handleSetFromDate} date={FromDate}></DatePickerWithPresets>
         </div>
+        <div className="flex flex-col gap-3">
           <Label>To</Label>
-        <div>
-          <DatePickerWithPresets FromSelection={ToSelection} setDate={setToDate} date={ToDate}></DatePickerWithPresets>
+          <DatePickerWithPresets FromSelection={ToSelection} setDate={handleSetToDate} date={ToDate}></DatePickerWithPresets>
         </div>
         {/* <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="estimation">Estimation</Label>
@@ -114,18 +142,32 @@ export default function Home() {
         
       </div>  
 
-      <div className="flex justify-center flex-col gap-5 card-container w-full">
+      {/* <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full sm:w-4/5 md:w-3/5 lg:w-2/4"> */}
         {/* Render PrayerCardCounter for each prayer */}
-        {Object.entries(prayerCounts).map(([prayer, count]) => (
+        {
+          daysDifference > 0 ?
+            (
+              <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full sm:w-4/5 md:w-3/5 lg:w-2/4">
+                <div className=" font-light w-full text-center p-8 md:p-4">Since {format(FromDate ?? 0, "dd/MM/yyyy")} until {format(ToDate, "dd/MM/yyyy")}, you have remaining {daysDifference} days of salah.</div>
+                {Object.entries(prayerCounts).map(([prayer, count]) => (
 
-          <PrayerCardCounter
-            key={prayer}
-            prayer={prayer}
-            prayerCount={count}
-            OnSetPrayerCount={() => handleSetPrayerCount(prayer as keyof Prayers)}
-          />
-        ))}
-      </div>
+                  <PrayerCardCounter
+                    key={prayer}
+                    prayer={prayer}
+                    prayerCount={count}
+                  // ActionButton
+                  // OnClickIncrement={() => handleIncreasePrayerCount(prayer as keyof Prayers)}
+                  // OnClickDecrement={() => handleDecreasePrayerCount(prayer as keyof Prayers)}
+                  />
+                ))}
+              </div>
+            )
+            :
+            (
+              <div className="p-12 w-full text-muted-foreground">Specify your start date and calculate the number of missed Salah prayers up to any given date.</div>
+            )
+        }
+      {/* </div> */}
     </main>
   );
 }
