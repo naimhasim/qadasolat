@@ -28,7 +28,7 @@ export default function RootLayout({
             <ModeToggle/> 
           </div>
         </div> */}
-        <div className="bg-background text-foreground py-16 md:py-32 flex flex-col justify-center items-center">
+        <div className="bg-background text-foreground py-16 md:py-20 flex flex-col justify-center items-center">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Qada Solat Tracker</h1>
           <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground">One Prayer at a time, Track with Confidence.</p>
         </div>
