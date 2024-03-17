@@ -16,25 +16,28 @@ export type Prayer = {
 type PrayerKeysExceptSet = Exclude<keyof Prayer, 'set'>;
 
 const CheckboxCell = (
-    { 
-        row, 
-        accessor, 
-        onCheckedChange 
-    }: { 
-        row: Row<Prayer>, 
-        accessor: PrayerKeysExceptSet, 
+    {
+        row,
+        accessor,
+        onCheckedChange
+    }: {
+        row: Row<Prayer>,
+        accessor: PrayerKeysExceptSet,
         onCheckedChange: (isChecked: CheckedState, accessor: PrayerKeysExceptSet) => void
-     }) => (
-        
-    <div className="flex items-center justify-center">
-        <Checkbox
-            name={`${accessor}.${row.id}`}
-            checked={row.original[accessor] ? true : false}
-            onCheckedChange={(isChecked) => onCheckedChange(isChecked, accessor)}
-            aria-label={`${accessor}-${row.id}`}
-        />
-    </div>
-);
+    }) => {
+
+    return (
+
+        <div className="flex items-center justify-center">
+            <Checkbox
+                name={`${accessor}.${row.id}`}
+                checked={row.original[accessor] ? true : false}
+                onCheckedChange={(isChecked) => onCheckedChange(isChecked, accessor)}
+                aria-label={`${accessor}-${row.id}`}
+            />
+        </div>
+    )
+};
 
 export const prayerColumnDefs = ( { setStateFunction, prayers } : { setStateFunction : any, prayers : Prayer[] } ) => {
     

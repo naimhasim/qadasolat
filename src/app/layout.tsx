@@ -7,8 +7,8 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Qadasolat | Making Up Years of Missed Salah",
-  description: "Making Up Years of Missed Salah",
+  title: "Qadasolat | Compensating for Missed Salah Throughout One's Lifeime",
+  description: "Compensating for Missed Salah Throughout One's Lifeime",
 };
 
 export default function RootLayout({
@@ -30,10 +30,13 @@ export default function RootLayout({
         </div> */}
         <div className="bg-background text-foreground py-16 md:py-20 flex flex-col justify-center items-center">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Qada Solat Tracker</h1>
-          <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground">One Prayer at a time, Track with Confidence.</p>
+          <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground">Compensating for Missed Salah Throughout One's Lifeime</p>
         </div>
         {children}
         <Toaster/>
+        <footer className="flex justify-center items-center h-auto text-muted">
+          <ul className="p-2">© 2024 Naim Hasim. All rights reserved.</ul>
+        </footer>
         </body>
     </html>
   );

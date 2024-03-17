@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { Prayer, prayerColumnDefs } from "@/components/salah/columns"
 import { DataTable } from "@/components/DataTable"
+import { PaginationState } from "@tanstack/react-table";
 
 const FromSelection : SelectionItem = [
   {
@@ -35,6 +36,11 @@ const ToSelection: SelectionItem = [
 export default function Estimation() {
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
   const [FromDate, setFromDate] = useState<Date>()
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 5,
+  })
+
   const [ToDate, setToDate] = useState<Date | undefined>(new Date())
   const [daysDifference, setDaysDifference] = useState(0);
   const { toast } = useToast()
@@ -166,9 +172,14 @@ export default function Estimation() {
           daysDifference > 0 ?
             (
               <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full sm:w-4/5 md:w-3/5 lg:w-2/4">
-                <div className=" text-xl font-light w-full text-center p-8 md:p-4">You have remaining <span className="text-2xl font-medium text-primary">{daysDifference}</span> days of missed salah.</div>
-                <div className="sm: w-full md:w-auto overflow-auto">
-                    <DataTable columns={columns} data={estimationData} />
+                <div className=" text-xl font-light w-full text-center p-8 md:p-4">You have remaining <span className="text-2xl font-medium text-primary">{daysDifference}</span> {daysDifference>1 ? "sets" : "set"} of missed salah.</div>
+                
+                <div className="sm: w-full md:w-auto">
+                    <DataTable 
+                      columns={columns} 
+                      data={estimationData} 
+                      pagination={pagination} 
+                      setPagination={setPagination} />
                 </div>
                 
                 {/* PrayerCount Card */}
@@ -187,7 +198,7 @@ export default function Estimation() {
             )
             :
             (
-              <div className="text-center p-12 w-full text-muted-foreground">Specify date range and calculate the number of missed Salah prayers up to any given date.</div>
+              <div className="text-center p-12 w-full text-muted-foreground pb-80">Specify date range and calculate the number of missed Salah prayers up to any given date.</div>
             )
         }
       {/* </div> */}
