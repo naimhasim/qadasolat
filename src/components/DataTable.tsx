@@ -24,8 +24,6 @@ import {
 import {PDFViewer, PDFDownloadLink} from "@react-pdf/renderer";
 import { DataTablePagination } from "./DatatablePagination";
 import Invoice from "./pdf/Invoice";
-import invoice from "../data/invoice";
-import { Fragment } from "react";
 import { Button } from "./ui/button";
 
 interface DataTableProps<TData, TValue> {
@@ -41,22 +39,7 @@ export function DataTable<TData, TValue>({
     pagination,
     setPagination,
 }: DataTableProps<TData, TValue>) {
-    
-    if (columns === undefined || data === undefined) {
-        return (
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
-                                {columns.length === 0 ? "No columns provided." : "No data provided."}
-                            </TableCell>
-                        </TableRow>
-                    </TableHeader>
-                </Table>
-            </div>
-        );
-    }
+
     const table = useReactTable({
         data,
         columns,
@@ -76,7 +59,7 @@ export function DataTable<TData, TValue>({
             <div className="flex justify-center item">
                 {/* <small>Export</small> */}
                 {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className=" inline-block h-4 w-4 transform shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"></path></svg> */}
-                <Fragment>
+                <>
                     {/* <PDFViewer width={'100%'} height={'500'}>
                         <Invoice invoiceData={data}/>
                     </PDFViewer> */}
@@ -88,7 +71,7 @@ export function DataTable<TData, TValue>({
                         </PDFDownloadLink>
                         </Button>
                     {/* </div> */}
-                </Fragment>
+                </>
                 </div>
         <div className="rounded-sm border border-muted w-full overflow-auto">
             

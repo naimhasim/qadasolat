@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     return (
             <Document>
                 <Page size="A4" style={styles.page}>
-                    <Image style={styles.logo} src={logo} />
+                    <Image style={styles.logo} src={logo} alt="logo"/>
                     <InvoiceTitle title='Qadha Salah Chart'/>
                     {/* <InvoiceNo invoice={invoice}/> */}
                     {/* <BillTo invoice={invoice}/> */}

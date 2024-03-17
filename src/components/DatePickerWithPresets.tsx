@@ -24,6 +24,7 @@ import { Dispatch } from "react"
 export type SelectionItem = {
   name: string;
   value: string | number;
+  disabled?: boolean;
 }[];
 
 type DatePickerWithPresetsProp = {
@@ -65,8 +66,8 @@ const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, d
             <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent position="popper">
-            {FromSelection.map(({ name, value }) => (
-              <SelectItem key={name} value={value.toString()}>
+            {FromSelection.map(({ name, value, disabled }) => (
+              <SelectItem key={name} value={value.toString()} disabled={disabled}>
                 {name}
               </SelectItem>
             ))}

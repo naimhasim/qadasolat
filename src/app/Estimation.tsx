@@ -24,6 +24,7 @@ const FromSelection : SelectionItem = [
   {
     name: "10 Years Ago",
     value: -3650,
+    disabled: true
   },
 ]
 const ToSelection: SelectionItem = [
@@ -82,7 +83,7 @@ export default function Estimation() {
     
     if(daysDifference > 0){
         
-        let cubaan : Prayer[] = Array.from({ length: daysDifference }, (_, index) => ({
+        let initialEstimationPrayers : Prayer[] = Array.from({ length: daysDifference }, (_, index) => ({
             set: index + 1,
             subuh: false,
             zohor: false,
@@ -91,8 +92,7 @@ export default function Estimation() {
             isyak: false,
         }));
         
-        console.log({cubaan});
-        setEstimationData(cubaan);
+        setEstimationData(initialEstimationPrayers);
         
     }
   },[daysDifference])

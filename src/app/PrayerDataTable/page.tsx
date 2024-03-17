@@ -24,12 +24,16 @@ async function getData(): Promise<Prayer[]> {
 }
 
 
-export default async () => {
+const PrayerDataTable = async () => {
   const data = await getData();
   const columns = prayerColumnDefs; 
-  return (<>
-    <div>
-      <DataTable columns={columns} data={data} />
-    </div>
-  </>);
-}
+  return (
+    <>
+      <div>
+        <DataTable columns={columns} data={data} />
+      </div>
+    </>
+  );
+};
+
+export default PrayerDataTable;
