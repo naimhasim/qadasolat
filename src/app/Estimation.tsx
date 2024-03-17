@@ -3,7 +3,7 @@ import DatePickerWithPresets, { SelectionItem } from "@/components/DatePickerWit
 import PrayerCardCounter, { Prayers} from "@/components/PrayerCardCounter";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Prayer, prayerColumnDefs } from "@/components/salah/columns"
 import { DataTable } from "@/components/DataTable"
 import { PaginationState } from "@tanstack/react-table";
@@ -128,7 +128,7 @@ export default function Estimation() {
     setFromDate(FromDate);
   };
   
-  const handleSetToDate = (ToDate: Date) => {
+  const handleSetToDate: (ToDate: Date | undefined) => Dispatch<SetStateAction<Date | undefined>> | void = (ToDate) => {
     
     if (ToDate && FromDate && FromDate.getTime() > ToDate.getTime()) {
       toast({

@@ -30,7 +30,7 @@ export type SelectionItem = {
 type DatePickerWithPresetsProp = {
   FromSelection: SelectionItem
   date: Date | undefined
-  setDate: Dispatch<React.SetStateAction<Date | undefined>>
+  setDate(date: Date | undefined): void | Dispatch<React.SetStateAction<Date | undefined>>
 }
 const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, date, setDate  } : DatePickerWithPresetsProp ) {
 
