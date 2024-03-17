@@ -1,5 +1,6 @@
 // 'use client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MouseEventHandler } from "react";
 
 export type Prayers = {
     Subuh: number;
@@ -15,8 +16,8 @@ export type PrayerCardCounterProps = {
   } & (
     { 
         ActionButton: true, 
-        OnClickIncrement: (count: number) => void, 
-        OnClickDecrement: (count: number) => void 
+        OnClickIncrement: MouseEventHandler<HTMLButtonElement> | undefined, 
+        OnClickDecrement: MouseEventHandler<HTMLButtonElement> | undefined 
     } |
     { 
         ActionButton?: false, 
