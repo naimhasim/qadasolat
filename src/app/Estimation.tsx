@@ -32,10 +32,15 @@ const ToSelection: SelectionItem = [
     name: "Today",
     value: 0,
   },
+  {
+    name: "Tomorrow",
+    value: 1,
+  },
 ]
 
 export default function Estimation() {
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
+  const [isDownload, setDownload] = useState<boolean>(false)
   const [FromDate, setFromDate] = useState<Date>()
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -71,15 +76,17 @@ export default function Estimation() {
   },[FromDate,ToDate])
   
   useEffect((): void => {
-    setPrayerCounts(prevCounts => {
-      return {
-        Subuh: daysDifference,
-        Zohor: daysDifference,
-        Asar: daysDifference,
-        Maghrib: daysDifference,
-        Isyak: daysDifference
-      };
-    });
+    // setPrayerCounts(prevCounts => {
+    //   return {
+    //     Subuh: daysDifference,
+    //     Zohor: daysDifference,
+    //     Asar: daysDifference,
+    //     Maghrib: daysDifference,
+    //     Isyak: daysDifference
+    //   };
+    // });
+    
+    setDownload(false);
     
     if(daysDifference > 0){
         
@@ -143,7 +150,7 @@ export default function Estimation() {
   };
   
   return (
-    <main className="flex flex-col items-center justify-start bg-background text-foreground p-3">
+    <main className="flex flex-col items-center justify-start text-foreground p-3">
       
       <div className="p-10 flex flex-col gap-4">
         <div className="flex flex-col gap-3">
@@ -179,6 +186,8 @@ export default function Estimation() {
                       columns={columns} 
                       data={estimationData} 
                       pagination={pagination} 
+                      isDownload={isDownload}
+                      setDownload={setDownload}
                       setPagination={setPagination} />
                 </div>
                 

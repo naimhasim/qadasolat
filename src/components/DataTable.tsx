@@ -24,13 +24,16 @@ import {
 import {PDFViewer, PDFDownloadLink} from "@react-pdf/renderer";
 import { DataTablePagination } from "./DatatablePagination";
 import Invoice from "./pdf/Invoice";
-import { Button } from "./ui/button";
+import { DownloadIcon } from "@radix-ui/react-icons";
+import { Loader2 } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     pagination: PaginationState
     setPagination: OnChangeFn<PaginationState> | undefined
+    isDownload: boolean,
+    setDownload: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function DataTable<TData, TValue>({
@@ -38,6 +41,8 @@ export function DataTable<TData, TValue>({
     data,
     pagination,
     setPagination,
+    isDownload,
+    setDownload,
 }: DataTableProps<TData, TValue>) {
 
     const table = useReactTable({
@@ -54,9 +59,33 @@ export function DataTable<TData, TValue>({
         }
     })
 
+    const onSetDownload = () => {
+        setDownload(!isDownload);
+    };
+    
+
+    const handleDownload = async (URL: string | null) => {
+        if(!URL) return;
+        try {
+            // Replace 'example.pdf' with the path to your file
+            const response = await fetch(URL);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'example.pdf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
+        setDownload(false);
+    };
+    
     return (
         <>
-            <div className="flex justify-center item">
+            <div className="flex justify-center items-center mb-1">
                 {/* <small>Export</small> */}
                 {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className=" inline-block h-4 w-4 transform shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"></path></svg> */}
                 <>
@@ -65,11 +94,35 @@ export function DataTable<TData, TValue>({
                     </PDFViewer> */}
                     
                     {/* <div className="hover:underline"> */}
-                    <Button className="text-muted-secondary text-sm" variant="link">
-                        <PDFDownloadLink document={<Invoice invoiceData={data}/>} fileName="qadasolat">
-                            Download
-                        </PDFDownloadLink>
-                        </Button>
+                    
+                    <button className="inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 text-xs h-8 border-dashed" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r4p:" data-state="closed" disabled={ isDownload ? true : false }
+                        onClick={onSetDownload}>
+                        
+                        {!isDownload ? (
+                            <>
+                                <DownloadIcon className="w-4 h-4 mr-2" />
+                                Download
+                            </>
+                        ) : (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please Wait
+                                
+                                <PDFDownloadLink document={<Invoice invoiceData={data} />} fileName="qada">
+                                    {({ blob, url, loading, error }) => {
+
+                                        if(!loading){
+                                            handleDownload(url) 
+                                        }
+                                        
+                                        return (<></>);
+                                    }
+                                    }
+                                </PDFDownloadLink>
+                            </>
+                        )}
+                    </button>
+
                     {/* </div> */}
                 </>
                 </div>

@@ -28,8 +28,8 @@ const CheckboxCell = (
 
     return (
 
-        <div className="flex items-center justify-center">
-            <Checkbox
+        <div className="flex items-center justify-center p-4">
+            <Checkbox className="scale-150"
                 name={`${accessor}.${row.id}`}
                 checked={row.original[accessor] ? true : false}
                 onCheckedChange={(isChecked) => onCheckedChange(isChecked, accessor)}
