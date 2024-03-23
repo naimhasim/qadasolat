@@ -28,9 +28,9 @@ export default function RootLayout({
             <ModeToggle/> 
           </div>
         </div> */}
-        <div className="bg-background text-foreground py-16 md:py-20 flex flex-col justify-center items-center">
+        <div className="text-foreground py-16 md:py-20 flex flex-col justify-center items-center">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Qada Solat Tracker</h1>
-          <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground">{`Compensating for Missed Salah Throughout One${"'"}s Lifeime`}</p>
+          <p className="scroll-m-20 text-md tracking-tighter text-muted-foreground text-center">{`Compensating for Missed Salah Throughout One${"'"}s Lifetime`}</p>
         </div>
         {children}
         <Toaster/>
