@@ -24,7 +24,7 @@ const FromSelection : SelectionItem = [
   {
     name: "10 Years Ago",
     value: -3650,
-    disabled: true
+    disabled: false
   },
 ]
 const ToSelection: SelectionItem = [
@@ -36,7 +36,7 @@ const ToSelection: SelectionItem = [
 
 let savedDaysDifference: number
 let savedEstimationData: Prayer[]
-
+let savedFromDate: Date | undefined
 export default function Estimation() {
   
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
@@ -99,7 +99,6 @@ export default function Estimation() {
   useEffect(() => {
     savedDaysDifference = JSON.parse(localStorage.getItem('daysDifference') || '0');;
     if (!daysDifference) {
-      console.log({kone:daysDifference});
       setDaysDifference(savedDaysDifference);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,6 +111,25 @@ export default function Estimation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]) // strict mode and useRef causing unexpected result.
+  
+  useEffect(() => {
+    
+    if(!localStorage.getItem('FromDate')){ return }
+    
+    savedFromDate = localStorage.getItem('FromDate') === 'undefined' ? undefined : new Date(JSON.parse(localStorage.getItem('FromDate') as string ));
+    
+    if(savedFromDate){
+      setFromDate(savedFromDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]) // strict mode and useRef causing unexpected result.
+  
+  useEffect(() => {
+    localStorage.setItem('FromDate', JSON.stringify(FromDate?.toJSON()));
+  }, [FromDate]);
+  useEffect(() => {
+    localStorage.setItem('ToDate', JSON.stringify(ToDate?.toJSON()));
+  }, [ToDate]);
   
   useEffect(() => {
     localStorage.setItem('estimationData', JSON.stringify(estimationData));
