@@ -31,15 +31,16 @@ const ToSelection: SelectionItem = [
   {
     name: "Today",
     value: 0,
-  },
-  {
-    name: "Tomorrow",
-    value: 1,
-  },
+  }
 ]
 
+let savedDaysDifference: number
+let savedEstimationData: Prayer[]
+
 export default function Estimation() {
+  
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
+  
   const [isDownload, setDownload] = useState<boolean>(false)
   const [FromDate, setFromDate] = useState<Date>()
   const [pagination, setPagination] = useState<PaginationState>({
@@ -48,17 +49,8 @@ export default function Estimation() {
   })
 
   const [ToDate, setToDate] = useState<Date | undefined>(new Date())
-  const [daysDifference, setDaysDifference] = useState(0);
+  const [daysDifference, setDaysDifference] = useState<number>(0);
   const { toast } = useToast()
-  
-  
-  let [prayerCounts, setPrayerCounts] = useState<Prayers>({
-    Subuh: 0,
-    Zohor: 0,
-    Asar: 0,
-    Maghrib: 0,
-    Isyak: 0
-  });
   
   const columns = prayerColumnDefs({setStateFunction: setEstimationData, prayers: estimationData});
   
@@ -86,23 +78,57 @@ export default function Estimation() {
     //   };
     // });
     
-    setDownload(false);
-    
-    if(daysDifference > 0){
-        
-        let initialEstimationPrayers : Prayer[] = Array.from({ length: daysDifference }, (_, index) => ({
-            set: index + 1,
-            subuh: false,
-            zohor: false,
-            asar: false,
-            maghrib: false,
-            isyak: false,
-        }));
-        
-        setEstimationData(initialEstimationPrayers);
-        
-    }
+    setDownload(false); 
+    if (daysDifference > 0) {
+      if (savedEstimationData && savedEstimationData.length === daysDifference) {
+          setEstimationData([...savedEstimationData]);
+      } else {
+          let initialEstimationPrayers: Prayer[] = Array.from({ length: daysDifference }, (_, index) => ({
+              set: index + 1,
+              subuh: false,
+              zohor: false,
+              asar: false,
+              maghrib: false,
+              isyak: false,
+          }));
+          setEstimationData([...initialEstimationPrayers]);
+      }
+  }
   },[daysDifference])
+
+  useEffect(() => {
+    savedDaysDifference = JSON.parse(localStorage.getItem('daysDifference') || '0');;
+    if (!daysDifference) {
+      console.log({kone:daysDifference});
+      setDaysDifference(savedDaysDifference);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]) // strict mode and useRef causing unexpected result.
+  
+  useEffect(() => {
+    savedEstimationData = JSON.parse(localStorage.getItem('estimationData') || '[]');
+    if (!estimationData.length) {
+      setEstimationData([...savedEstimationData]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]) // strict mode and useRef causing unexpected result.
+  
+  useEffect(() => {
+    localStorage.setItem('estimationData', JSON.stringify(estimationData));
+  }, [estimationData]);
+  
+  useEffect(() => {
+    localStorage.setItem('daysDifference', JSON.stringify(daysDifference));
+  }, [daysDifference]);
+  
+  // let [prayerCounts, setPrayerCounts] = useState<Prayers>({
+  //   Subuh: 0,
+  //   Zohor: 0,
+  //   Asar: 0,
+  //   Maghrib: 0,
+  //   Isyak: 0
+  // });
+  
   // function handleIncreasePrayerCount(prayer: keyof Prayers ) {
   //   setPrayerCounts(prevCounts => {
   //     return {
