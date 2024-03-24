@@ -28,7 +28,7 @@ const CheckboxCell = (
 
     return (
 
-        <div className="flex items-center justify-center p-4">
+        <div className="flex items-center justify-center">
             <Checkbox className="scale-150"
                 name={`${accessor}.${row.id}`}
                 checked={row.original[accessor] ? true : false}
@@ -50,6 +50,7 @@ export const prayerColumnDefs = ( { setStateFunction, prayers } : { setStateFunc
             return prayer;
         });
         
+        localStorage.setItem('estimationData', JSON.stringify([...updatedPrayers]));
         setStateFunction([...updatedPrayers]);
     };
     

@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     pagination: PaginationState
     setPagination: OnChangeFn<PaginationState> | undefined
-    isDownload: boolean,
+    isDownload: boolean
     setDownload: React.Dispatch<React.SetStateAction<boolean>>
 }
 
