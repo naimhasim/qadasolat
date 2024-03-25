@@ -1,7 +1,16 @@
-## Qadasolat
+## <div style="margin-left: auto; margin-right: auto; display:block; weight: 100%;">[Qadasolat](https://qadasolat.vercel.app)</div>
+  - A tool to help Muslims keep track of missed prayers (qada solat) and facilitate the process of making up for them.
+  - The project aims to assist users in managing their prayers effectively by providing a solution to organize and fulfill missed prayers.
+<br>
+<hr>
+<br>
 
-- Qadasolat is a tool designed to help Muslims keep track of missed prayers (qada solat) and facilitate the process of making up for them.
-- The project aims to assist users in managing their prayers effectively by providing a solution to organize and fulfill missed prayers.
+<div style="display:flex; justify-content: center; gap: 2.5rem">
+  <img src="public/dark.png" width='auto' height='500vh' style="display:inline;">
+  <img src="public/light.png" width='auto' height='500vh' style="display:inline;">
+</div>
+
+
   
 ## Features
   - Track missed prayers (qada solat).
@@ -11,8 +20,10 @@
 
 ## Upcoming Features
   - Save qada progress and access it from anywhere
-    
+
 ### Getting Started
+
+  ### Installation
   1. Clone the repository ``` git clone git@github.com:naimhasim/qadasolat.git```
   2. Install necessary dependencies ```npm install```
   3. Run the development server ```npm run dev``` to start using the application.
