@@ -37,6 +37,7 @@ const ToSelection: SelectionItem = [
 let savedDaysDifference: number
 let savedEstimationData: Prayer[]
 let savedFromDate: Date | undefined
+let savedToDate: Date | undefined
 export default function Estimation() {
   
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
@@ -120,6 +121,18 @@ export default function Estimation() {
     
     if(savedFromDate){
       setFromDate(savedFromDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]) // strict mode and useRef causing unexpected result.
+  
+  useEffect(() => {
+    
+    if(!localStorage.getItem('ToDate')){ return }
+    
+    savedToDate = localStorage.getItem('ToDate') === 'undefined' ? undefined : new Date(JSON.parse(localStorage.getItem('ToDate') as string ));
+    
+    if(savedToDate){
+      setToDate(savedToDate);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]) // strict mode and useRef causing unexpected result.
