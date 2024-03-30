@@ -9,7 +9,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       <ThemeProvider>
         {children}
       </ThemeProvider>
-    {/* </SessionProvider> */}
+    // </SessionProvider>
   );
 }
 export default AppProvider;
