@@ -1,12 +1,12 @@
 'use client'
 import DatePickerWithPresets, { SelectionItem } from "@/components/DatePickerWithPresets";
-import PrayerCardCounter, { Prayers} from "@/components/PrayerCardCounter";
-import { Label } from "@/components/ui/label";
+// import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Prayer, prayerColumnDefs } from "@/components/salah/columns"
 import { DataTable } from "@/components/DataTable"
 import { PaginationState } from "@tanstack/react-table";
+// import { Session } from "next-auth";
 
 const FromSelection : SelectionItem = [
   {
@@ -14,7 +14,11 @@ const FromSelection : SelectionItem = [
     value: `${-(365/12)}`,
   },
   {
-    name: "1 Years Ago",
+    name: "6 Months Ago",
+    value: `${-(365/2)}`,
+  },
+  {
+    name: "1 Year Ago",
     value: -365,
   },
   {
@@ -39,7 +43,7 @@ let savedEstimationData: Prayer[]
 let savedFromDate: Date | undefined
 let savedToDate: Date | undefined
 export default function Estimation() {
-  
+  // const { data: session, status } = useSession();
   const [estimationData, setEstimationData] = useState<Prayer[]>([])
   
   const [isDownload, setDownload] = useState<boolean>(false)
@@ -207,17 +211,25 @@ export default function Estimation() {
   };
   
   return (
-    <main className="flex flex-col items-center justify-start text-foreground p-3">
-      
-      <div className="p-10 flex flex-col gap-4">
+    <section className="flex flex-col items-center justify-start text-foreground p-3">
+
+      <div className="p-10 flex flex-col gap-2">
         <div className="flex flex-col gap-3">
-          <Label className="">From</Label>
-          <DatePickerWithPresets FromSelection={FromSelection} setDate={handleSetFromDate} date={FromDate}></DatePickerWithPresets>
+          {/* <Label className="">From</Label> */}
+          <DatePickerWithPresets FromSelection={FromSelection} placeholder="Enter your start date" setDate={handleSetFromDate} date={FromDate}></DatePickerWithPresets>
         </div>
         <div className="flex flex-col gap-3">
-          <Label>To</Label>
-          <DatePickerWithPresets FromSelection={ToSelection} setDate={handleSetToDate} date={ToDate}></DatePickerWithPresets>
+          {/* <Label>To</Label> */}
+          <DatePickerWithPresets FromSelection={ToSelection} placeholder="Enter your end date" setDate={handleSetToDate} date={ToDate}></DatePickerWithPresets>
         </div>
+        {/* {!session && <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-secondary"></span>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <Link className="px-2 text-muted-foreground hover:underline hover:cursor-pointer" href={'/auth/signin'}>Sign Up to save Progress</Link>
+          </div>
+        </div>} */}
         {/* <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="estimation">Estimation</Label>
           <Input type="text" id="estimation" placeholder="Enter your estimation (days)" />
@@ -230,17 +242,20 @@ export default function Estimation() {
         
       </div>  
 
-      {/* <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full sm:w-4/5 md:w-3/5 lg:w-2/4"> */}
+      <div className="flex justify-center flex-row flex-wrap gap-5 card-container w-screen">
         {/* Render PrayerCardCounter for each prayer */}
         {
           daysDifference > 0 ?
             (
-              <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full sm:w-4/5 md:w-3/5 lg:w-2/4">
-                <div className=" text-xl font-light w-full text-center p-8 md:p-4">You have remaining <span className="text-2xl font-medium text-primary">{daysDifference}</span> {daysDifference>1 ? "sets" : "set"} of missed salah.</div>
+              <div className="flex justify-center flex-col sm:flex-row flex-wrap gap-5 card-container w-full">
+                <div className=" text-xl font-light w-full text-center p-8 md:p-4">
+                  You have remaining <span className="text-2xl font-medium text-primary">  {daysDifference}</span> {daysDifference>1 ? "sets" : "set"} of missed salah. 
+                </div>
                 
-                <div className="sm: w-full md:w-auto">
+                <div className="px-3 sm:px-0 w-screen sm:w-auto">
                     <DataTable 
                       columns={columns} 
+                      daysDifference={daysDifference}
                       data={estimationData} 
                       pagination={pagination} 
                       isDownload={isDownload}
@@ -255,19 +270,22 @@ export default function Estimation() {
                     key={prayer}
                     prayer={prayer}
                     prayerCount={count}
-                  // ActionButton
-                  // OnClickIncrement={() => handleIncreasePrayerCount(prayer as keyof Prayers)}
-                  // OnClickDecrement={() => handleDecreasePrayerCount(prayer as keyof Prayers)}
+                    ActionButton
+                    OnClickIncrement={() => handleIncreasePrayerCount(prayer as keyof Prayers)}
+                    OnClickDecrement={() => handleDecreasePrayerCount(prayer as keyof Prayers)}
                   />
                 ))} */}
               </div>
             )
             :
             (
-              <div className="text-center p-12 w-full text-muted-foreground pb-80">Specify date range and calculate the number of missed Salah prayers up to any given date.</div>
+              <div className=" text-md font-light w-full text-center text-muted-foreground px-20 sm:px-24 break-words">
+                  Specify date range and calculate the number of missed Salah prayers up to any given date.
+                </div>
+              // <p className="text-center pt-0 p-12 text-muted-foreground pb-80 w-3/5 sm:w-3/5 lg:w-2/4">Specify date range and calculate the number of missed Salah prayers up to any given date.</p>
             )
         }
-      {/* </div> */}
-    </main>
+      </div>
+    </section>
   );
 }

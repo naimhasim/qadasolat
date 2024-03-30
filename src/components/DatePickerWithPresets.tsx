@@ -29,10 +29,11 @@ export type SelectionItem = {
 
 type DatePickerWithPresetsProp = {
   FromSelection: SelectionItem
+  placeholder?: string
   date: Date | undefined
   setDate(date: Date | undefined): void | Dispatch<React.SetStateAction<Date | undefined>>
 }
-const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, date, setDate  } : DatePickerWithPresetsProp ) {
+const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, placeholder, date, setDate  } : DatePickerWithPresetsProp ) {
 
   const handleSelectChange = (value: string) => {
     setDate(addDays(new Date(), parseInt(value)));
@@ -55,7 +56,7 @@ const DatePickerWithPresets = function DatePickerWithPresets( { FromSelection, d
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "dd/MM/yyyy") : <span>Pick a date</span>}
+          {date ? format(date, "dd/MM/yyyy") : <span>{ (placeholder) ? placeholder : "Pick a date"}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
