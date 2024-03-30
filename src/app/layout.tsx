@@ -22,9 +22,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className}`}>
         <AppProvider>
-          <main className="flex flex-col min-h-screen sm:h-screen border border-red-500 px-1">
+          <main className="flex flex-col min-h-screen sm:h-screen px-1">
             <NavBar/>
-            <div className="grow flex flex-col h-auto border border-blue-500">
+            <div className="grow flex flex-col h-auto">
               {children}
             </div>
             <Footer/>
