@@ -1,11 +1,16 @@
-import Estimation from "./Estimation";
 
-export default function Home() {
+// import { getServerSession } from "next-auth/next";
+// import { authOptions } from "./api/auth/[...nextauth]/route";
+import Guest from "./(guest)/guest/page";
+// import Dashboard from "./(dashboard)/dashboard/page";
+
+export default async function Home() {
+  // const session = await getServerSession(authOptions);
   
   return (
-    <main>
-      <Estimation>
-      </Estimation>
-    </main>
+    <>
+      {/* session ? <Dashboard/> : <Guest/> */}
+      <Guest/>
+    </>
   );
 }

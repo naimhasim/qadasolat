@@ -25,7 +25,8 @@ import {PDFViewer, PDFDownloadLink} from "@react-pdf/renderer";
 import { DataTablePagination } from "./DatatablePagination";
 import Invoice from "./pdf/Invoice";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { Loader2 } from "lucide-react";
+import { CloudDownloadIcon, Loader2 } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -34,6 +35,7 @@ interface DataTableProps<TData, TValue> {
     setPagination: OnChangeFn<PaginationState> | undefined
     isDownload: boolean
     setDownload: React.Dispatch<React.SetStateAction<boolean>>
+    daysDifference: number
 }
 
 export function DataTable<TData, TValue>({
@@ -43,6 +45,7 @@ export function DataTable<TData, TValue>({
     setPagination,
     isDownload,
     setDownload,
+    daysDifference
 }: DataTableProps<TData, TValue>) {
 
     const table = useReactTable({
@@ -85,47 +88,50 @@ export function DataTable<TData, TValue>({
     
     return (
         <>
-            <div className="flex justify-center items-center mb-1">
+            <div className="flex justify-center items-center gap-2 mb-1">
                 {/* <small>Export</small> */}
                 {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className=" inline-block h-4 w-4 transform shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"></path></svg> */}
-                <>
+
                     {/* <PDFViewer width={'100%'} height={'500'}>
                         <Invoice invoiceData={data}/>
                     </PDFViewer> */}
                     
-                    {/* <div className="hover:underline"> */}
-                    
-                    <button className="inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 text-xs h-8 border-dashed" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r4p:" data-state="closed" disabled={ isDownload ? true : false }
-                        onClick={onSetDownload}>
-                        
-                        {!isDownload ? (
-                            <>
-                                <DownloadIcon className="w-4 h-4 mr-2" />
-                                Download
-                            </>
-                        ) : (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Please Wait
-                                
-                                <PDFDownloadLink document={<Invoice invoiceData={data} />} fileName="qada">
-                                    {({ blob, url, loading, error }) => {
+                    <div className="flex gap-1">
+                        {daysDifference < 3650 && <Button variant={"shadcn"} size={'shadcn'} 
+                                disabled={ isDownload ? true : false } 
+                                onClick={onSetDownload}>
+                            
+                            {!isDownload ? (
+                                <>
+                                    <DownloadIcon className="w-4 h-4 mr-2" />
+                                    Export
+                                </>
+                            ) : (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Please Wait
+                                    
+                                    <PDFDownloadLink document={<Invoice invoiceData={data} />} fileName="qada">
+                                        {({ blob, url, loading, error }) => {
 
-                                        if(!loading){
-                                            handleDownload(url) 
+                                            if(!loading){
+                                                handleDownload(url) 
+                                            }
+                                            
+                                            return (<></>);
                                         }
-                                        
-                                        return (<></>);
-                                    }
-                                    }
-                                </PDFDownloadLink>
-                            </>
-                        )}
-                    </button>
+                                        }
+                                    </PDFDownloadLink>
+                                </>
+                            )}
+                        </Button>}
+                        {/* <Button variant={"shadcn"} size={'shadcn'} >
+                            <CloudDownloadIcon className="w-4 h-4 mr-2"/>
+                            Save Progress
+                        </Button> */}
+                    </div>
 
-                    {/* </div> */}
-                </>
-                </div>
+            </div>
         <div className="rounded-sm border border-muted w-full overflow-auto">
             
             <Table>
